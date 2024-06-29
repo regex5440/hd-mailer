@@ -2,10 +2,10 @@
   "name": "mailing-service",
   "version": "1.0.0",
   "description": "mailing service to be used by backend apps",
-  "main": "index.js",
+  "main": "app/index.ts",
   "type": "module",
   "scripts": {
-    "dev": "nodemon --watch index.ts",
+    "dev": "nodemon --watch app/index.ts",
     "build": "tsc"
   },
   "keywords": [
@@ -27,7 +27,7 @@
     "@types/node": "^20.14.9",
     "@types/nodemailer": "^6.4.15",
     "nodemon": "^3.1.4",
-    "typenode": "^5.4.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5.5.2"
   }
 }
