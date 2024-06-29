@@ -1,0 +1,29 @@
+version: '1.0'
+networks:
+  kafka-net:
+    driver: bridge
+
+services:
+  zookeeper:
+    image: zookeeper
+    networks:
+      - kafka-net
+    ports:
+      - "2181:2181"
+
+  kafka:
+    depends_on:
+      - zookeeper
+    image: ubuntu/kafka
+    networks:
+      - kafka-net
+    ports:
+      - "9092:9092"
+
+  server:
+    depends_on:
+      - zookeeper
+      - kafka
+    image: ubuntu
+    networks:
+      - kafka-net
