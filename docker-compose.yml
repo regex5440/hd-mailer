@@ -5,25 +5,26 @@ networks:
 
 services:
   zookeeper:
-    image: zookeeper
+    image: confluentinc/cp-zookeeper
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SYNC_LIMIT: 2
     networks:
       - kafka-net
-    ports:
-      - "2181:2181"
+
 
   kafka:
     depends_on:
       - zookeeper
-    image: ubuntu/kafka
+    image: confluentinc/cp-kafka
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     networks:
       - kafka-net
     ports:
       - "9092:9092"
-
-  server:
-    depends_on:
-      - zookeeper
-      - kafka
-    image: ubuntu
-    networks:
-      - kafka-net
+  
