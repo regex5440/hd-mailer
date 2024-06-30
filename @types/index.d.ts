@@ -3,4 +3,5 @@ export type MailData = {
   toEmail: string;
   subject: string;
   html: string;
+  allowReply?: boolean;
 };
