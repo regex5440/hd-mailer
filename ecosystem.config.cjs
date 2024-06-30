@@ -10,7 +10,9 @@ const env = fs.readFileSync(path.resolve("./.env"), "utf8");
 const envJson = {};
 env.split("\n").forEach((line) => {
   const [key, value] = line.split("=");
-  envJson[key] = value.replace(/(\r\n|\n|\r)/gm, "");
+  if (key && value) {
+    envJson[key] = value.replace(/(\r\n|\n|\r)/gm, "");
+  }
 });
 
 module.exports = {
