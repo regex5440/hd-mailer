@@ -18,6 +18,29 @@
 - [NodeMailer](https://www.nodemailer.com/)
 - [Zod](https://zod.dev/)
 
+## Setup & Usage
+
+> Requires a `.env` file to be at the root, with required variables (as mentioned below)
+
+### Development Flow
+
+1. Spin-up the kafka service (exposed at port 9092)
+   ```
+   npm run kafka
+   ```
+2. For new containers, create kafka topic:
+   ```
+   npm run create-topic
+   ```
+3. Start in dev mode:
+   ```
+   npm run dev
+   ```
+
+### Production Flow
+
+> Everything is handled with `npm start`
+
 ## Environment Variables
 
 ```
