@@ -8,6 +8,7 @@ declare global {
       SMTP_USERNAME: string;
       SMTP_PASSWORD: string;
       SMTP_PORT: string;
+      EMAIL_DOMAIN: string;
     }
   }
 }
