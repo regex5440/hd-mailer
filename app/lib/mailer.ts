@@ -11,6 +11,12 @@ const mailTransporter = createTransport({
   },
 });
 
+export const verifySMTP = (
+  callback: (err: Error | null, success: true) => void
+) => {
+  mailTransporter.verify(callback);
+};
+
 /**
  *
  * @param param.to Email address of recipient
@@ -22,10 +28,13 @@ const mailTransporter = createTransport({
 const sendEmail = async ({
   toEmail,
   subject,
-  fromName = "hd.mailer",
+  fromName = "HD Mailer",
   html,
+  allowReply,
 }: MailData) => {
-  const sender = `${fromName} <${process.env.EMAIL_USERNAME}>`;
+  const sender = allowReply
+    ? `${fromName} <${process.env.SMTP_USERNAME}>`
+    : `${fromName} <noreply@${process.env.EMAIL_DOMAIN}`;
   return mailTransporter.sendMail({
     from: sender,
     to: toEmail,
