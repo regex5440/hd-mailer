@@ -11,14 +11,14 @@ import { consumeMessage } from "./lib/kafka/consume.js";
 import { MAIL_DATA_SCHEMA } from "./lib/zod.js";
 import { MailData } from "@types";
 const app = express();
-const PORT = process.env.PORT || 6543;
+const PORT = process.env.PORT || 80;
 
 app.use(cors({ origin: "*" }));
 app.use(authMiddleware);
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Hi, I am a mailer service.");
 });
 
 app.post("/mail", async (req, res) => {
@@ -43,6 +43,10 @@ app.post("/mail", async (req, res) => {
     console.error("Error while producing message", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
+});
+
+app.use("*", (req, res) => {
+  res.status(404).json({ error: "Not Found" });
 });
 
 app
