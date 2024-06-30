@@ -43,12 +43,11 @@
 
 ## Environment Variables
 
+NOTE: Values must be without quotes
+
 ```
 JWT_SECRET=<JWT secret key to be used for static token>
-HTTP_PORT=<Only used for http server, unsecured> (optional, default 80)
-CERTIFICATE=<url for the certificate file>
-CERTIFICATE_KEY=<url for the certificate key file>
-CERTIFICATE_PASSPHRASE=<passphrase to decrypt certificate>
+HTTP_PORT=<Only used for http server> (optional, default 6432)
 SMTP_SERVER=<SMTP host url>
 SMTP_PORT=<SMTP port> (optional, default 465)
 SMTP_USERNAME=<SMTP email username>
