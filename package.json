@@ -2,11 +2,15 @@
   "name": "mailing-service",
   "version": "1.0.0",
   "description": "mailing service to be used by backend apps",
-  "main": "app/index.ts",
   "type": "module",
   "scripts": {
-    "dev": "nodemon --watch app/index.ts",
-    "build": "tsc"
+    "build": "npx tsc",
+    "start": "node --env-file .env build/index.js",
+    "dev": "npx tsx watch --env-file .env app/index.ts",
+    "kafka": "docker compose up -d",
+    "stop-kafka": "docker compose down",
+    "create-topic": "node -e \"import('./kafka-admin.js').then((x)=>x.setupKafkaTopics())\"",
+    "prestart": "npm run build && npm run kafka && npm run create-topic"
   },
   "keywords": [
     "mailing-service"
@@ -19,15 +23,14 @@
     "jose": "^5.6.2",
     "kafkajs": "^2.2.4",
     "nanoid": "^5.0.7",
-    "nodemailer": "^6.9.14"
+    "nodemailer": "^6.9.14",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/node": "^20.14.9",
     "@types/nodemailer": "^6.4.15",
-    "nodemon": "^3.1.4",
-    "ts-node": "^10.9.2",
     "typescript": "^5.5.2"
   }
 }
