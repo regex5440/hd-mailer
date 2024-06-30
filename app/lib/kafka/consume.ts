@@ -6,9 +6,9 @@ export async function consumeMessage(messageHandler: (data: MailData) => void) {
   const consumer = kafkaInstance.consumer({
     groupId: KAFKA_CONFIG.CONSUMER_GROUP.MAILER_CONSUMER,
   });
-  consumer.connect();
+  await consumer.connect();
   await consumer.subscribe({
-    topic: KAFKA_CONFIG.TOPIC.MAIL_QUEUE,
+    topics: [KAFKA_CONFIG.TOPIC.MAIL_QUEUE],
     fromBeginning: true,
   });
   await consumer.run({
@@ -17,11 +17,7 @@ export async function consumeMessage(messageHandler: (data: MailData) => void) {
       if (!messageValue) {
         return;
       }
-      // messageHandler(messageValue as MailData);
-      console.log({
-        key: message.key,
-        value: message.value?.toString(),
-      });
+      messageHandler(JSON.parse(messageValue));
     },
   });
 }
