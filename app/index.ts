@@ -1,69 +1,82 @@
+import fs from "fs";
+import http from "http";
+import https from "https";
 import express from "express";
 import cors from "cors";
 import { default as authMiddleware } from "./middleware/auth.js";
-import {
-  connectProducer,
-  disconnectProducer,
-  produceMessage,
-} from "./lib/kafka/produce.js";
+import { connectProducer, disconnectProducer } from "./lib/kafka/produce.js";
 import sendEmail, { verifySMTP } from "./lib/mailer.js";
 import { consumeMessage } from "./lib/kafka/consume.js";
-import { MAIL_DATA_SCHEMA } from "./lib/zod.js";
-import { MailData } from "@types";
+import router from "./routes/index.js";
 const app = express();
-const PORT = process.env.PORT || 80;
+const PORT = process.env.HTTP_PORT || 80;
 
 app.use(cors({ origin: "*" }));
 app.use(authMiddleware);
 app.use(express.json());
+app.use(router);
 
-app.get("/", (req, res) => {
-  res.send("Hi, I am a mailer service.");
-});
+async function startServer() {
+  const privateKey = await fetch(process.env.CERTIFICATE_KEY).then((res) =>
+    res.text()
+  );
+  const certificate = await fetch(process.env.CERTIFICATE).then((res) =>
+    res.text()
+  );
 
-app.post("/mail", async (req, res) => {
-  // Produce the message to kafka queue
-  try {
-    const parsedData = MAIL_DATA_SCHEMA.safeParse(req.body);
-    if (!parsedData.success) {
-      return res
-        .status(400)
-        .json({ error: parsedData.error.flatten().fieldErrors });
-    }
-    const data: MailData = {
-      fromName: parsedData.data.fromService,
-      toEmail: parsedData.data.toEmail,
-      subject: parsedData.data.subject,
-      html: parsedData.data.html,
-      allowReply: parsedData.data.allowReply,
-    };
-    await produceMessage(data);
-    res.json({ message: "Queued" });
-  } catch (error) {
-    console.error("Error while producing message", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+  const httpServer = http.createServer(app);
+  const httpsServer = https.createServer(
+    {
+      key: privateKey,
+      passphrase: process.env.CERTIFICATE_PASSPHRASE,
+      cert: certificate,
+    },
+    app
+  );
 
-app.use("*", (req, res) => {
-  res.status(404).json({ error: "Not Found" });
-});
+  httpsServer
+    .listen(443, async () => {
+      console.log(`HTTPS SERVER STARTED AT :443`);
+      verifySMTP(async (err, success) => {
+        if (!err) {
+          await connectProducer();
+          console.log("Producer is connected");
+          await consumeMessage(sendEmail);
+          console.log("Consumer is connected");
+        } else {
+          console.error("SMTP Server is not connected", err);
+        }
+      });
+    })
+    .on("close", async () => {
+      console.log("Server is closing");
+      await disconnectProducer();
+    });
 
-app
-  .listen(PORT, async () => {
-    console.log(`Server is running on PORT: ${PORT}`);
-    verifySMTP(async (err, success) => {
-      if (!err) {
-        await connectProducer();
-        console.log("Producer is connected");
-        await consumeMessage(sendEmail);
-        console.log("Consumer is connected");
-      } else {
-        console.error("SMTP Server is not connected", err);
+  httpServer
+    .listen(PORT, async () => {
+      console.log(`HTTP SERVER PORT: ${PORT}`);
+      if (PORT === 80) {
+        verifySMTP(async (err, success) => {
+          if (!err) {
+            await connectProducer();
+            console.log("Producer is connected");
+            await consumeMessage(sendEmail);
+            console.log("Consumer is connected");
+          } else {
+            console.error("SMTP Server is not connected", err);
+          }
+        });
+      }
+    })
+    .on("close", async () => {
+      if (PORT === 80) {
+        console.log("Server is closing");
+        await disconnectProducer();
       }
     });
-  })
-  .on("close", async () => {
-    console.log("Server is closing");
-    await disconnectProducer();
-  });
+}
+
+startServer();
+// const privateKey = fs.readFileSync("key.pem", "utf8");
+// const certificate = fs.readFileSync("cert.pem", "utf8");
