@@ -78,5 +78,3 @@ async function startServer() {
 }
 
 startServer();
-// const privateKey = fs.readFileSync("key.pem", "utf8");
-// const certificate = fs.readFileSync("cert.pem", "utf8");
