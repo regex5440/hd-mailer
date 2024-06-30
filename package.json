@@ -7,7 +7,7 @@
     "build": "npx tsc",
     "start": "node --env-file .env build/index.js",
     "dev": "npx tsx watch --env-file .env app/index.ts",
-    "kafka": "docker compose up",
+    "kafka": "docker compose up -d",
     "stop-kafka": "docker compose down",
     "create-topic": "node -e \"import('./kafka-admin.js').then((x)=>x.setupKafkaTopics())\"",
     "prestart": "npm run build && npm run kafka && npm run create-topic"
