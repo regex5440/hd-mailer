@@ -2,6 +2,7 @@ import { MailData } from "@types";
 import { sendMessageToSQS } from "src/lib/aws/sqs.js";
 import { MAIL_DATA_SCHEMA } from "src/lib/zod.js";
 import { APIGatewayEvent, Handler } from "aws-lambda";
+import { isTokenValid } from "src/lib/jwt";
 
 export const handler: Handler = async (
   event: APIGatewayEvent,
@@ -9,6 +10,16 @@ export const handler: Handler = async (
   callback
 ) => {
   try {
+    const authToken = event.headers.Authorization?.split(" ")[1] ?? "";
+    const isTokenValidResult = await isTokenValid(authToken);
+    if (!isTokenValidResult) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({
+          message: "Unauthorized",
+        }),
+      };
+    }
     const body = event.body;
 
     // Check if the payload is valid
