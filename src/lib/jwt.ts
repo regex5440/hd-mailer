@@ -1,12 +1,14 @@
 import { SignJWT, jwtVerify } from "jose";
 
-const encoder = new TextEncoder();
-const JWT_SECRET = encoder.encode(process.env.JWT_SECRET);
+const getEncodedSecret = () => {
+  const encoder = new TextEncoder();
+  return encoder.encode(process.env.JWT_SECRET);
+};
 
 export const isTokenValid = async (token: string): Promise<boolean> => {
   try {
-    await jwtVerify(token, JWT_SECRET, {
-      algorithms: ["RSA256"],
+    await jwtVerify(token, getEncodedSecret(), {
+      algorithms: ["HS256"],
     });
     return true;
   } catch (error) {
@@ -18,5 +20,5 @@ export const generateStaticToken = async () => {
   return new SignJWT({ issuedBy: "https://hdxdev.in", service: "hd.mailer" })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .sign(JWT_SECRET);
+    .sign(getEncodedSecret());
 };

@@ -2,7 +2,6 @@ declare global {
   namespace NodeJS {
     interface ProcessEnv {
       NODE_ENV: "development" | "production" | "test";
-      HTTP_PORT: string;
       JWT_SECRET: string;
       SMTP_SERVER: string;
       SMTP_USERNAME: string;
