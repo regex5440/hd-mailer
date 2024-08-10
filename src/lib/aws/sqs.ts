@@ -1,10 +1,9 @@
-import { SQS, config as AWSConfig, AWSError } from "aws-sdk";
-
-AWSConfig.update({ region: process.env.AWS_REGION });
+import { AWSError } from "aws-sdk/lib/error";
+import SQS, { SendMessageResult } from "aws-sdk/clients/sqs";
 
 export const sendMessageToSQS = async (
   data: object
-): Promise<AWSError | SQS.SendMessageResult> => {
+): Promise<AWSError | SendMessageResult> => {
   const sqs = new SQS();
 
   return new Promise((resolve, reject) => {
