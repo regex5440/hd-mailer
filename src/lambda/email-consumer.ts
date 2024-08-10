@@ -14,7 +14,8 @@ export const handler: Handler = async (event: SQSEvent) => {
   try {
     for (const record of event.Records) {
       const messageData: MailData = JSON.parse(record.body);
-      sendEmail(messageData);
+      const x = await sendEmail(messageData);
+      console.log("EmailSent", x.messageId);
     }
   } catch (error) {
     console.error("Error while processing message", error);
