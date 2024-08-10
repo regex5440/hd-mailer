@@ -5,5 +5,5 @@ export const MAIL_DATA_SCHEMA = z.object({
   toEmail: z.string().email("Invalid email"),
   subject: z.string({ message: "Subject is required" }).min(1),
   html: z.string({ message: "HTML body is required" }).min(1),
-  allowReply: z.boolean().default(false),
+  allowReply: z.boolean().optional().default(false),
 });
