@@ -1,5 +1,8 @@
 import { MailData } from "@types";
 import { createTransport } from "nodemailer";
+import decryptEnvVar from "./aws/env-decrypt.js";
+
+await decryptEnvVar("SMTP_PASSWORD");
 
 const mailTransporter = createTransport({
   host: process.env.SMTP_SERVER,
