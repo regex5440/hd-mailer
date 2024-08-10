@@ -1,0 +1,44 @@
+name: "CI/CD"
+on:
+  pull_request:
+    branches:
+      - main-v2
+
+jobs:
+  lambda_update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Gather AWS Permissions
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ vars.AWS_ACCESS_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 20.15
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload zip to lambdas
+        run: for filename in build/*.js; do
+          lambda_function_name=$(basename "$filename" .js)
+          zip_filename="$(lambda_function_name).zip"
+
+          zip -j "$zip_filename" "$filename"
+
+          aws lambda update-function-code --function-name "$lambda_function_name" --zip-file fileb://"$zip_filename"
+          echo "Uploaded $filename to lambda ':' $lambda_function_name"
+          done
+
+      - name: Clean up
+        run: rm -f *.zip
