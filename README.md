@@ -6,48 +6,28 @@
 ## Pre-requisites
 
 - Node >= 20.10.0
-- Docker
-- docker-compose [gist](https://gist.github.com/npearce/6f3c7826c7499587f00957fee62f8ee9#docker-compose-install)↗️
 
 ## Stack & Utilities
 
-- [ExpressJs](https://expressjs.com/)
 - [TypeScript](https://www.typescriptlang.org/)
-- [Zookeeper + Kafka (by confluent)](https://www.confluent.io/)
 - [jose (jwt)](https://github.com/panva/jose)
 - [NodeMailer](https://www.nodemailer.com/)
 - [Zod](https://zod.dev/)
 
-## Setup & Usage
+## Setup Environment Variables
 
-> Requires a `.env` file to be at the root, with required variables (as mentioned below)
-
-### Development Flow
-
-1. Spin-up the kafka service (exposed at port 9092)
-   ```
-   npm run kafka
-   ```
-2. For new containers, create kafka topic:
-   ```
-   npm run create-topic
-   ```
-3. Start in dev mode:
-   ```
-   npm run dev
-   ```
-
-### Production Flow
-
-> Everything is handled with `npm start`
-
-## Environment Variables
+Requires a `.env` file to be at the root, with required variables (as mentioned below)
 
 NOTE: Values must be without quotes
 
 ```
+
+// Producer Lambda
+SQS_URL=<SQS Url for producer lambda>
 JWT_SECRET=<JWT secret key to be used for static token>
-HTTP_PORT=<Only used for http server> (optional, default 6432)
+AWS_REGION=<AWS lambda region, can only be used for local-setup>
+
+// Consumer Lambda
 SMTP_SERVER=<SMTP host url>
 SMTP_PORT=<SMTP port> (optional, default 465)
 SMTP_USERNAME=<SMTP email username>
