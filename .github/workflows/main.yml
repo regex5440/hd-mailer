@@ -35,11 +35,9 @@ jobs:
           lambda_function_name=$(basename "$filename" .js)
           zip_filename="build/${lambda_function_name}.zip"
 
-          zip -j "$zip_filename" "$filename"
+          zip -r "$zip_filename" "$filename"
 
-          aws lambda update-function-code \
-          --function-name "$lambda_function_name" \
-          --zip-file "fileb://$zip_filename"
+          aws lambda update-function-code --function-name "$lambda_function_name" --zip-file "fileb://$zip_filename"
 
           echo "Uploaded $zip_filename to lambda ':' $lambda_function_name"
 
