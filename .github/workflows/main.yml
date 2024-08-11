@@ -30,10 +30,10 @@ jobs:
         run: npm run build
 
       - name: Upload zip to lambdas
-        run: for filename in build/*.js; do
+        run: cd build && for filename in *.js; do
 
           lambda_function_name=$(basename "$filename" .js)
-          zip_filename="build/${lambda_function_name}.zip"
+          zip_filename="${lambda_function_name}.zip"
 
           zip -r "$zip_filename" "$filename"
 
