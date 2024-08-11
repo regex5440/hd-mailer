@@ -1,7 +1,7 @@
 ### HD-Mailer (LEGACY) | LATEST DEPLOYMENT FROM BRANCH:[main-v2](https://github.com/regex5440/hd-mailer/tree/main-v2)
 
 > Mailing service API to be used by different apps.
-> Currently live [here](https://mailer.hdxdev.in)↗️
+> Currently live [here](https://mailer2.hdxdev.in)↗️
 
 ## Pre-requisites
 
