@@ -1,7 +1,7 @@
 ### HD-Mailer
 
 > Mailing service API to be used by different apps.
-> Currently live [here](https://mailer2.hdxdev.in)↗️
+> Currently live [here](https://mailer.hdxdev.in)↗️
 
 ## Pre-requisites
 
