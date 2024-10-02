@@ -1,12 +1,8 @@
 import { MailData } from "@types";
 import sendEmail from "src/lib/mailer.js";
 import type { Handler, SQSEvent } from "aws-lambda";
-import decryptEnvVar from "src/lib/aws/env-decrypt";
 
 export const handler: Handler = async (event: SQSEvent) => {
-  process.env.SMTP_PASSWORD.endsWith("=")
-    ? await decryptEnvVar("SMTP_PASSWORD")
-    : null;
   if (event.Records.length === 0) {
     return;
   }
