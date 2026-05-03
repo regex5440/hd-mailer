@@ -1,6 +1,6 @@
 {
   "name": "mailing-service",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "mailing service to be used by backend apps",
   "type": "module",
   "scripts": {
@@ -13,16 +13,16 @@
   "author": "Harsh Dagar (hdxdev.in)",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.1672.0",
-    "jose": "^5.6.2",
-    "nodemailer": "^6.9.14",
-    "zod": "^3.23.8"
+    "aws-sdk": "^2.1693.0",
+    "jose": "^6.2.3",
+    "nodemailer": "^8.0.7",
+    "zod": "^4.4.2"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.143",
-    "@types/node": "^20.14.9",
-    "@types/nodemailer": "^6.4.15",
-    "esbuild": "^0.23.0",
-    "typescript": "^5.5.2"
+    "@types/aws-lambda": "^8.10.161",
+    "@types/node": "^25.6.0",
+    "@types/nodemailer": "^8.0.0",
+    "esbuild": "^0.28.0",
+    "typescript": "^6.0.3"
   }
 }
