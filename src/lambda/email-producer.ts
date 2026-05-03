@@ -4,11 +4,7 @@ import { MAIL_DATA_SCHEMA } from "src/lib/zod.js";
 import { APIGatewayEvent, Handler } from "aws-lambda";
 import { isTokenValid } from "src/lib/jwt";
 
-export const lambdaHandler: Handler = async (
-  event: APIGatewayEvent,
-  context,
-  callback,
-) => {
+export const lambdaHandler: Handler = async (event: APIGatewayEvent) => {
   try {
     const authToken = event.headers.Authorization?.split(" ")[1] ?? "";
     const isTokenValidResult = await isTokenValid(authToken);
@@ -68,8 +64,6 @@ export const lambdaHandler: Handler = async (
       }),
     };
   } catch (error) {
-    callback(error as Error, null);
-    console.log(error as string, null);
     return {
       statusCode: 500,
       body: JSON.stringify({ message: "Internal Server Error" }),
