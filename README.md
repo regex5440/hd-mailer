@@ -1,11 +1,11 @@
 ### HD-Mailer
 
 > Mailing service API to be used by different apps.
-> Currently live [here](https://mailer.hdxdev.in)↗️
+> Currently live API origin [https://mailer.hdxdev.in](https://mailer.hdxdev.in)↗️
 
 ## Pre-requisites
 
-- Node >= 20.10.0
+- Node >= 24.13.1
 
 ## Stack & Utilities
 

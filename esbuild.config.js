@@ -6,5 +6,5 @@ await esbuild.build({
   minify: true,
   outdir: "build",
   platform: "node",
-  target: "node20",
+  target: "node24",
 });
