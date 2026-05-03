@@ -1,6 +1,6 @@
 {
   "name": "mailing-service",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "mailing service to be used by backend apps",
   "type": "module",
   "scripts": {

@@ -2,7 +2,7 @@ import { MailData } from "@types";
 import sendEmail from "src/lib/mailer.js";
 import type { Handler, SQSEvent } from "aws-lambda";
 
-export const handler: Handler = async (event: SQSEvent) => {
+export const lambdaHandler: Handler = async (event: SQSEvent) => {
   if (event.Records.length === 0) {
     return;
   }

@@ -4,10 +4,10 @@ import { MAIL_DATA_SCHEMA } from "src/lib/zod.js";
 import { APIGatewayEvent, Handler } from "aws-lambda";
 import { isTokenValid } from "src/lib/jwt";
 
-export const handler: Handler = async (
+export const lambdaHandler: Handler = async (
   event: APIGatewayEvent,
   context,
-  callback
+  callback,
 ) => {
   try {
     const authToken = event.headers.Authorization?.split(" ")[1] ?? "";
@@ -37,7 +37,7 @@ export const handler: Handler = async (
       if (!parsedData.success) {
         console.error(
           "Invalid payload",
-          parsedData.error.flatten().fieldErrors
+          parsedData.error.flatten().fieldErrors,
         );
         throw new Error("Invalid payload");
       }
